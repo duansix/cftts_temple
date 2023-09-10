@@ -76,7 +76,7 @@
                 var file = fileInput.files[0]; // 获取用户选择的文件
                 const fileName = file.name;
 
-                try {
+
                     const res = await fetch('/getsign');
                     const ossParams = await res.json();
 
@@ -99,9 +99,8 @@
                     await client.putACL(result.name, 'public-read');
 
                     const imageUrl = `https://xiao-ling-tong.oss-cn-hongkong.aliyuncs.com${result.name}`
-		    console.log(imageUrl);
+					console.log(imageUrl); 
                     var imageElement = document.createElement('img');
-		    console.log(imageUrl);
                     imageElement.src = imageUrl;
                     imageElement.alt = '已上传的图像';
                     var imageContainer = document.getElementById('imageContainer');
@@ -110,10 +109,9 @@
 
                     var imageLink = document.getElementById('imageLink');
                     imageLink.innerHTML = 'url：<a href="' + imageUrl + '" target="_blank">' + imageUrl + '</a>';
+					console.log(imageUrl); 
+                    // alert("文件上传成功！");
 
-                    alert("文件上传成功！");
-                } 
-		    console.log(imageUrl);
             });
         });
 
