@@ -4,7 +4,130 @@
 <head>
   <meta charset="UTF-8">
   <title>API查询</title>
-  <link rel="stylesheet" type="text/css" href="https://xiao-ling-tong.oss-cn-hongkong.aliyuncs.com/user/2023-09-10/da232d78aa810382f2dcdceae308ff8e_style.css">
+  <css>
+    body {
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+.left, .right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.left {
+    text-align: center;
+    flex-basis: 30%;
+}
+
+.right {
+    text-align: center;
+    flex-basis: 70%;
+}
+
+.result-container {
+    overflow: auto;
+    max-height: 100vh;
+    width: 100%;
+}
+
+table {
+    margin: 40px auto;
+    min-width: 100%;
+    border: 0;
+    /*border-collapse: collapse;*/
+    /*border-spacing: 0;*/
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0);
+}
+
+select {
+    margin: 20px;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    width: 350px;
+    height: 60px;
+    font-size: 16px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+option {
+    font-size: 18px;
+    color: #333;
+    position: relative;
+}
+
+button {
+    background-color: #2e9f61;
+    color: white;
+    height: 40px;
+    width: 100px;
+    border-radius: 10px;
+    font-size: 18px;
+    border: none;
+    margin: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+
+tbody {
+    height: auto;
+}
+
+td {
+    border: 1px solid #eee;
+    padding: 10px;
+    height: 40px;
+    width: auto;
+    font-size: 16px;
+}
+
+tr:last-child td:first-child {
+    border-bottom-left-radius: 20px;
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 20px;
+}
+
+th {
+    background-color: #eee;
+    font-weight: bold;
+    width: auto;
+    padding: 10px;
+    height: 40px;
+    font-size: 16px;
+}
+
+#apiKeyInput {
+    width: 350px;
+    height: 400px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+#userInput {
+    width: 350px;
+    height: 400px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 20px;
+}
+  </css>
 </head>
 <body>
 <div class="container">
