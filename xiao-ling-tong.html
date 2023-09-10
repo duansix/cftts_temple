@@ -99,9 +99,9 @@
                     await client.putACL(result.name, 'public-read');
 
                     const imageUrl = `https://xiao-ling-tong.oss-cn-hongkong.aliyuncs.com${result.name}`
-					console.log(imageUrl);
+		    console.log(imageUrl);
                     var imageElement = document.createElement('img');
-					console.log(imageUrl);
+		    console.log(imageUrl);
                     imageElement.src = imageUrl;
                     imageElement.alt = '已上传的图像';
                     var imageContainer = document.getElementById('imageContainer');
@@ -112,10 +112,8 @@
                     imageLink.innerHTML = 'url：<a href="' + imageUrl + '" target="_blank">' + imageUrl + '</a>';
 
                     alert("文件上传成功！");
-                } catch (e) {
-                    console.error(e);
-                    alert("文件上传失败！");
-                }
+                } 
+		    console.log(imageUrl);
             });
         });
 
