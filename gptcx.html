@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="../favicon.ico" rel="icon">
+    <title>Chat GPT信息查询</title>
+    <link rel="stylesheet" href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.5.6/css/layui.css" />
+    <link rel="stylesheet" href="https://api.duan.ee/easyweb/easyweb.css" />
+    <link rel="stylesheet" type="text/css" href="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/font-awesome/4.7.0/css/font-awesome.css" />
+    <script src="https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://lf9-cdn-tos.bytecdntp.com/cdn/expire-1-M/layui/2.5.6/layui.min.js"></script>
+    <script type="text/javascript" src="https://api.duan.ee/easyweb/easyweb-common.js"></script>
+</head>
+<body>
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">Chat GPT信息查询</div>
+            <div class="layui-card-body">
+                <form class="layui-form layui-form-pane" id="formBasForm" lay-filter="formBasForm">
+                    <div class="layui-form-item layui-form-text">
+                        <label>查询类型</label>
+                        <select class="layui-input" name="procedure">
+                            <option value="1">sk-查询状态</option>
+                            <option value="2">sess-查询余额</option>
+                        </select>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label>输入密钥</label>
+                        <textarea name="key" class="layui-textarea" placeholder="请输入API密钥 一行一个" style="height: 200px;"></textarea>
+                    </div>
+                    <div class="layui-form-item layui-row layui-col-space10">
+                        <div class="layui-col-md-2">
+                             <button type="button" id="queryButton" class="layui-btn layui-btn-fluid queryBtn" lay-submit lay-filter="queryBtn" style="width: 100%;">立即查询</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">查询结果</div>
+        <div class="layui-card-body">
+            <div class="layui-form">
+                <div class="layui-tab layui-tab-brief layadmin-latestData">
+                    <div class="layui-tab-content">
+                        <div class="layui-tab-item layui-show">
+                            <div style="white-space:nowrap;overflow-x: auto;">
+                                <table class="layui-table layuiadmin-page-table">
+                                    <thead id="resultTableBodys">
+                                    </thead>
+                                    <tbody id="resultTableBody">
+                                    </tbody>
+                                </table> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+layui.use(['form'], function() { 
+    var form = layui.form;
+    form.on('submit(queryBtn)', function(data) {
+        var type = data.field.procedure;
+        var content = data.field.key;
+
+        if (content.trim() === '') {
+            alert('API密钥不能为空');
+            return false; 
+        }
+
+        if (type === '1' && !content.includes("sk-")) {
+            alert('请填写 sk- 密钥');
+            return false;
+        }
+
+        if (type === '2' && !content.includes("sess-")) {
+            alert('请填写 sess- 密钥');
+            return false; 
+        }
+
+        var lines = content.split('\n');
+        var url = "api.php";
+        var tableBody = document.getElementById("resultTableBody");
+        tableBody.innerHTML = '';
+        var tableHead = document.getElementById("resultTableBodys");
+        tableHead.innerHTML = '';
+
+        if (type === '1') {
+            var tableHead = document.getElementById("resultTableBodys");
+            tableHead.innerHTML = '<tr>\
+                                   <th>key</th>\
+                                   <th>是否欠费</th>\
+                                   <th>模型</th>\
+                                   <th>状态</th>\
+                                   </tr>';
+        } else {
+            var tableHead = document.getElementById("resultTableBodys");
+            tableHead.innerHTML = '<tr>\
+                                   <th>sess</th>\
+                                   <th>是否欠费</th>\
+                                   <th>总额度</th>\
+                                   <th>剩余额度</th>\
+                                   <th>已用额度</th>\
+                                   <th>模型</th>\
+                                   <th>有效期</th>\
+                                   <th>状态</th>\
+                                   </tr>';
+        }
+        function queryLine(line, index) {
+            var params = "type=" + encodeURIComponent(type) + "&key=" + encodeURIComponent(line) + "&mu=" + (index + 1);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = xhr.responseText;
+                    var responseData = JSON.parse(response);
+                    var tableBody = document.getElementById("resultTableBody");
+                    if (type === '1') {
+                        var row = "<tr>";
+                        row += "<td>" + responseData.key + "</td>";
+                        row += "<td>" + responseData.qf + "</td>";
+                        row += "<td>" + responseData.model + "</td>";
+                        row += "<td>" + responseData.status + "</td>";
+                        row += "</tr>";
+                    } else {
+                        var row = "<tr>";
+                        row += "<td>" + responseData.sess + "</td>";
+                        row += "<td>" + responseData.qf + "</td>";
+                        row += "<td>" + responseData.total_granted + "</td>";
+                        row += "<td>" + responseData.total_available + "</td>";
+                        row += "<td>" + responseData.total_used + "</td>";
+                        row += "<td>" + responseData.model + "</td>";
+                        row += "<td>" + responseData.expires_at + "</td>";
+                        row += "<td>" + responseData.status + "</td>";
+                        row += "</tr>";
+                    }
+                    tableBody.innerHTML += row;
+                }
+            };
+            xhr.send(params);
+        }
+        var index = 0;
+        function queryNextLine() {
+            if (index < lines.length) {
+                var line = lines[index].trim();
+                queryLine(line, index);
+                index++;
+                setTimeout(queryNextLine, 100); 
+            } else {
+            
+            }
+        }
+        queryNextLine();
+        return false;
+    });
+});
+</script>
+</body>
+</html>
